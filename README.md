@@ -1,105 +1,74 @@
-# BetKei by SKUNKEI
+# BetKei Fairanalysis
 
-BetKei is a restricted-access sports market analysis and Betfair Exchange interface. It brings upcoming events, current exchange prices, market-derived estimates, available historical form, model results, and connected-account betting activity into one authenticated workspace.
+BetKei brings sports-market analysis, historical model results, and authorized Betfair Exchange account tools together in the SKUNKEI platform. It is a private, authenticated service for eligible users, not a public betting service or an autonomous betting bot.
 
-BetKei is an information and account-management tool, not a source of certainty. Predictions can be wrong, prices and event coverage can change, and betting can result in the loss of money. BetKei does not promise returns or provide individualized financial advice.
+BetKei estimates and historical performance are informational only. Markets, prices, event coverage, and model estimates can be incomplete or change; past results do not guarantee future outcomes. Betting involves risk of loss.
 
-<img src="dashboard.png" alt="Dashboard Preview" />
+## Ways to use BetKei
 
----
+### BetKei website
 
-## Why BetKei
+The website is the primary BetKei workspace. Depending on account permissions and service configuration, authorized users can:
 
-Sports markets can be difficult to review alongside recent results and an individual exchange account. BetKei combines those views so an authorized user can inspect the price and the assumptions behind an estimate, compare model outcomes with resolved results, and review connected-account activity in one place.
+- Browse supported fixtures by sport and league, search events, and view available Betfair Exchange AU prices.
+- Review market-implied estimates, optional historical-form context, prediction results, and model performance.
+- View connected Betfair account information, open orders, and settled history.
+- Where enabled, submit a real BACK order after selecting a runner, reviewing the price and stake, and explicitly confirming the order in the website.
 
-The product is intentionally market-aware: it does not invent a forecast when it cannot obtain a complete, usable price set for the market. Historical form may add context when the source data and sample are available, but it does not remove uncertainty.
+Prices can be delayed, unavailable, suspended, or change before an action is confirmed. BetKei presents a model estimate only when the market has a complete set of usable runner prices; the interface indicates whether historical-form data contributes to the estimate.
 
----
+Predictions do not place orders automatically. A submitted order can be unmatched, rejected, delayed, or otherwise change state; check BetKei and Betfair directly if a result is unclear.
 
-## What It Does
+Website: [betkei.skunkei.com](https://betkei.skunkei.com/)
 
-### Market and Event Views
+<img src="dash.png" alt="Dashboard Preview" />
 
-- Browse upcoming events by sport, search by event or league, and sort by start time or prediction availability.
-- View current Betfair Exchange AU market prices where available. Price data is refreshed and may be delayed, unavailable, suspended, or changed before an action is confirmed.
-- See a model estimate only when the market has a complete set of usable runner prices. The estimate identifies whether it is based on the margin-adjusted market alone or also includes historical form.
-- Review results and resolved model outcomes, including model accuracy, qualifying-pick accuracy, sample counts, coverage, Brier score, calibration gap, and sport breakdowns where the data is available.
+### Estimates and performance
 
-<img src="markets.png" alt="Market Preview" />
+The current estimate starts from available exchange prices. BetKei converts decimal odds to implied probabilities and normalizes them across the market to account for the overround. When sufficient two-team historical-form data is available, a bounded form adjustment may be applied. Incomplete or invalid prices mean no model estimate is shown for that market.
 
-### Exchange Account and Bets
+An estimate is not a calibrated promise of an event's true probability. Market quality and freshness, event/runner matching, historical coverage, and form-sample quality all affect it; model rules may change as the service evolves.
 
-For appropriately authorized accounts with an active Betfair connection, BetKei can show account balance and exposure, current orders, and settled bet history. Depending on account privileges and service configuration, the upcoming-market view can also place a real **BACK** bet on Betfair after the user selects a runner, reviews the odds and stake, and confirms the action. Unmatched orders can be cancelled where supported.
+- **Model accuracy** summarizes resolved predictions in the displayed data; it does not forecast future accuracy.
+- **Pick accuracy** covers the smaller set of predictions that meet the qualifying-pick criteria. Consider its sample size and resolution coverage.
+- **Brier score and calibration gap** describe aspects of historical probability quality, not guaranteed future calibration.
+- **Projected P/L** is a notional model calculation. It is not the user's actual Betfair return and may omit real execution effects and costs.
+- **Settled Betfair P/L** comes from connected-account bet records and is distinct from projected model P/L.
 
-<img src="bets.png" alt="Bets Menu Preview" />
+Historical outcomes can be incomplete, delayed, or affected by event and runner matching. Interpret performance alongside its sample size, coverage, period, and available-data indicators.
 
-Bet placement is a separate user action. A model prediction does not place a bet automatically. Check the account, market, selection, price, stake, and status in Betfair before relying on any result; network or provider delays can affect confirmation and matching.
+### Integrations and account security
 
----
+Betfair Exchange AU provides markets, runner prices, account information, and order actions for authorized connections. TheSportsDB provides supported event schedules, scores, results, and historical sports data where available. Provider availability, sport and league coverage, market type, and event matching vary; a listed sport does not guarantee a market, complete prices, form data, or a forecast.
 
-## How the Estimate Works
+BetKei requires an authenticated account with the appropriate section privileges. Betfair connection and live order actions require additional authorization and may be disabled by service configuration. The service uses account access checks, CSRF protection for state-changing browser requests, server-side validation, and HTTPS on supported production traffic. Betfair passwords are forwarded to Betfair for authentication and are not stored by BetKei; the Betfair application key and session token are encrypted at rest. These measures describe the current implementation and do not guarantee that an account, device, or network cannot be compromised.
 
-The current implementation starts from available exchange prices. For each runner, it converts decimal odds to a raw implied probability using the reciprocal price, then normalizes the probabilities across the market to account for the market overround. Where two-team historical-form data is available with a sufficient sample, a bounded form adjustment may shift probability between those outcomes. If prices are incomplete or invalid, BetKei does not present a model forecast for that market.
+<img src="betfair-login.png" alt="Login Preview" />
 
-The result is a model estimate, not a calibrated promise of an event's true probability. The method depends on market quality, price freshness, event/runner matching, historical data coverage, and the size and quality of the form sample. Model rules can change as the service evolves.
+Protect both your SKUNKEI and Betfair accounts. Do not share credentials or session details. If an order request times out or its final state is unclear, check the Betfair account directly before taking further action.
 
----
+### Android application
 
-## Understanding Performance Figures
+BetKei integration into the SKUNKEI Android app is in development and planned for a future release. It is not available yet; currently, use the website to manage BetKei analysis and any enabled, user-confirmed Betfair actions. Do not rely on the Android app to place, monitor, or cancel BetKei orders until that integration is released.
 
-- **Model accuracy** summarizes resolved model predictions in the displayed data; it is not a forecast of future accuracy.
-- **Pick accuracy** applies to the smaller set of predictions that meet the model's qualifying-pick criteria. Always consider its sample count and resolution coverage.
-- **Brier score and calibration gap** describe aspects of historical probability quality. They do not guarantee future calibration.
-- **Model or projected P/L** is a notional calculation from recorded model probabilities and available prices/stake assumptions. It is not the user's actual Betfair return and does not include every real-world cost or execution effect.
-- **Settled Betfair P/L** comes from connected-account bet records and is distinct from model-projected P/L.
+### Command-line interface
 
-Historical outcomes can be incomplete, delayed, or dependent on event and runner matching. Compare figures using the sample size, coverage, time period, and available data shown alongside them.
+The `betkei-cli` directory contains a Python CLI for viewing a read-only BetKei Index snapshot. It uses browser-based, PKCE device authorization and a short-lived, read-only token. It can print model metrics and settled P/L history, including a full table with `:daily` in its interactive prompt.
 
----
+<img src="cmd-line.png" alt="CMD-line Preview" />
 
-## Data Sources and Integrations
+The CLI **cannot place or cancel bets**, change account settings, or access general BetKei API routes. It is not an automated betting client. A connected system Betfair session is required for settled Betfair data.
 
-- **Betfair Exchange AU** supplies exchange markets, runner prices, account information, and order actions for an authorized connection.
-- **TheSportsDB** supplies supported event schedules, scores, results, and historical sports data used where available for event displays and form context.
-- **Google Analytics** is configured for website usage measurement. See the [BetKei Privacy Policy](privacy.md) for information handled by the web app and connected services.
-- The website may also load presentation assets from a third-party content-delivery service.
+## Access and components
 
-Provider availability, sport/league coverage, market type, and event matching vary. A sport shown in the interface does not mean that every event has a Betfair market, complete prices, historical form, or a forecast.
+BetKei is private-use-only. CLI access requires an eligible BetKei super-administrator account, CLI Code Authentication enabled in account settings, and explicit approval in a regular browser. Installing the CLI does not grant service access.
 
----
+The website and APIs run as part of the SKUNKEI service. The CLI has separate server-side endpoints and schema requirements documented in its README. This repository is an overview and CLI source package, not a standalone deployment of the BetKei website or backend.
 
-## Access and Security
+## Responsible use
 
-The current BetKei application requires an authenticated account with the necessary administrative authorization. Betfair connection and live betting actions require additional privileges; live betting may also be disabled by service configuration.
+BetKei is not financial or betting advice and does not promise outcomes or returns. Use exchange features only where lawful, with an account you are authorized to use, and only after checking the event, selection, price, stake, and order status. Set limits and do not chase losses.
 
-The service uses account access checks, CSRF protection for state-changing browser requests, server-side validation, and HTTPS for supported production traffic. BetKei forwards the Betfair password to Betfair for authentication and does not store it. The Betfair application key and resulting session token are encrypted at rest by the service. This describes the current implementation, not a guarantee that any account, network, or device is invulnerable.
+## License
 
-<img src="login.png" alt="Betfair Login Preview" />
-
-Protect your SKUNKEI and Betfair accounts and devices. Do not share credentials or session details. Re-check the Betfair account directly if a bet request times out or its final status is unclear.
-
----
-
-## Responsible Use
-
-BetKei provides sports statistics, model estimates, and exchange tools for analysis and entertainment. It is not betting advice, financial advice, or a guarantee of results. Bet only where legal and if you meet the applicable minimum age (18+ where required). Set limits, do not chase losses, and stop if betting is causing harm.
-
----
-
-## Privacy
-
-BetKei handles account and technical information, market/prediction data, and connected Betfair account and order information as needed to provide its features. The app is configured to use Google Analytics for website usage measurement. See [privacy.md](privacy.md) for the current product-specific privacy notice and choices.
-
----
-
-## Repository Scope
-
-This repository contains the public-facing BetKei overview and privacy documentation. The authenticated web application, API, and service implementation are maintained as part of the SKUNKEI platform; this repository is not a standalone deployment package.
-
----
-
-## Links
-
-- [BetKei Web App](https://betkei.skunkei.com/) or [SKUNKEI Account](https://account.skunkei.com/)
-- [Privacy Policy](privacy.md) and [Terms of Service](terms.md)
-- [Email SKUNKEI](mailto:service@skunkei.com) or visit the [Help Centre](https://help.skunkei.com/)
+The CLI source is distributed under the license included in [`betkei-cli/LICENSE`](betkei-cli/LICENSE). Service access remains restricted independently of that source-code license. Website and Android components may have separate distribution terms.
